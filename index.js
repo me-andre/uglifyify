@@ -46,11 +46,9 @@ function uglifyify(file, opts) {
 
         debug = opts.sourcemap !== false && (debug || matched);
         opts = extend({}, {
-            fromString: true
-            , compress: true
-            , mangle: true
-            , filename: file
-            , sourceMaps: debug
+            fromString: true,
+            filename: file,
+            sourceMaps: debug
         }, opts);
 
         if (typeof opts.compress === 'object') {
