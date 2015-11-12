@@ -18,7 +18,7 @@ test('uglifyify: sanity check', function(t) {
     .pipe(bl(function(err, data) {
       if (err) return t.ifError(err)
       data = String(data)
-      t.notEqual(data.indexOf('var hello'), -1, 'var hello')
+      t.equal(data.indexOf('var hello'), -1, 'var hello')
       t.notEqual(data.indexOf('"world"'), -1, '"world"')
       t.notEqual(data, orig, 'should be minified')
       t.end()
