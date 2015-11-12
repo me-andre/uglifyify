@@ -67,11 +67,17 @@ function uglifyify(file, opts) {
       ).sourcemap
     }
 
-    var min = ujs.minify(buffer, opts)
+    buffer = 'function module(){\n' + buffer + '\n}';
 
-    // Uglify leaves a source map comment pointing back to "out.js.map",
-    // which we want to get rid of because it confuses browserify.
-    min.code = min.code.replace(/\/\/[#@] ?sourceMappingURL=out.js.map$/, '')
+    var min = ujs.minify(buffer, opts);
+
+    // Wrapping the code in the function allows uglify to drop unused named functions
+    // that are declared in the module top-level scope
+    min.code = function(code) {
+      var start = code.indexOf('{');
+      var end = code.lastIndexOf('}');
+      return code.slice(start + 1, end);
+    }(min.code);
     this.queue(min.code)
 
     if (min.map && min.map !== 'null') {
